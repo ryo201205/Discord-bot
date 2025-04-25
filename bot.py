@@ -2,9 +2,11 @@ import discord
 import gspread
 import os
 import re
+import json
 from datetime import datetime
 from dotenv import load_dotenv
 from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 
 # ------------------ 初期設定 ------------------
 load_dotenv()  # .envファイルから環境変数を読み込む
@@ -20,7 +22,7 @@ client = discord.Client(intents=intents)
 
 # ------------------ Google Sheets 認証 ------------------
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+credentials_info = json.loads(os.getenv("GOOGLE_CREDENTIALS"))
 gc = gspread.authorize(credentials)
 sheet = gc.open(SPREADSHEET_NAME).sheet1
 
